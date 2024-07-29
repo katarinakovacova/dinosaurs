@@ -34,7 +34,7 @@ SECRET_KEY = "django-insecure-aogn%uvt*wpm&llpt%_ryu6$ao&t*%m&id&6b-1ct1qtkzoj3q
 DEBUG = True
 
 # allow default hosts for both local development and full development in docker-compose
-ALLOWED_HOSTS = ["0.0.0.0", "127.0.0.1"]
+ALLOWED_HOSTS = ["0.0.0.0", "127.0.0.1", "localhost"]
 
 
 # Application definition
