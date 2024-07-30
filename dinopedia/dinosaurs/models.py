@@ -3,6 +3,9 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Dinosaur(models.Model):
+
+    IMAGES_PATH = "images/"
+
     class EatingClassification(models.TextChoices):
         HERBIVORE = "H", _("Herbivore")
         OMNIVORE = "O", _("Omnivore")
@@ -27,10 +30,13 @@ class Dinosaur(models.Model):
         GIGANTIC = "XXL", _("Gigantic")
         UNKNOWN = "U", _("Unknown")
     
-    name = models.CharField(max_length=150)
+    name = models.CharField(max_length=150, unique=True)
     eating_classification = models.CharField(max_length=1, choices=EatingClassification, default=EatingClassification.UNKNOWN)
     typical_color = models.CharField(max_length=50)
     period = models.CharField(max_length=1, choices=Period, default=Period.UNKNOWN)
     average_size = models.CharField(max_length=3, choices=Size, default=Size.UNKNOWN)
+    image1 = models.ImageField(upload_to=IMAGES_PATH, null=True, blank=True)
+    image2 = models.ImageField(upload_to=IMAGES_PATH, null=True, blank=True)
 
-    
+    def __str__(self):
+        return self.name
