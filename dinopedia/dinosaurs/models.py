@@ -38,5 +38,8 @@ class Dinosaur(models.Model):
     image1 = models.ImageField(upload_to=IMAGES_PATH, null=True, blank=True)
     image2 = models.ImageField(upload_to=IMAGES_PATH, null=True, blank=True)
 
+    class Meta:
+        ordering = ["name"]
+
     def __str__(self):
         return self.name
