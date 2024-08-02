@@ -1,4 +1,4 @@
-from rest_framework import authentication, permissions, viewsets
+from rest_framework import authentication, permissions, viewsets, mixins
 
 from .models import Dinosaur, User
 from .permissions import IsOwner
@@ -16,9 +16,12 @@ class DinosaurViewSet(DefaultsMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = DinosaurSerializer
 
 
-class UserViewSet(DefaultsMixin, viewsets.ModelViewSet):
-    queryset = User.objects.order_by("username")
+class UserViewSet(mixins.RetrieveModelMixin, 
+                  mixins.UpdateModelMixin,
+                  viewsets.GenericViewSet):
+    queryset = User.objects.all()
     serializer_class = UserSerializer
+    lookup_field = "username"
 
     authentication_classes = (
         authentication.BasicAuthentication,
@@ -27,6 +30,3 @@ class UserViewSet(DefaultsMixin, viewsets.ModelViewSet):
         permissions.IsAuthenticated,
         IsOwner
     )
-
-
-# TODO: /api/users/ should be read only and only show stuff for the current user (its ID)
