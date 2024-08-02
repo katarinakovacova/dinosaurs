@@ -40,7 +40,7 @@ ALLOWED_HOSTS = ["0.0.0.0", "127.0.0.1", "localhost"]
 # Application definition
 
 INSTALLED_APPS = [
-    "dinosaurs.apps.DinopollsConfig",
+    "dinosaurs",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -139,3 +139,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+AUTH_USER_MODEL = "dinosaurs.User"

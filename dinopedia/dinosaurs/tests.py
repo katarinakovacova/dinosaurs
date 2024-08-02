@@ -1,9 +1,15 @@
 from django.test import TestCase, Client
-from .models import Dinosaur
+from .models import Dinosaur, User
 
 
 class DinosaurTestCase(TestCase):
     def setUp(self):
+        User.objects.create_user(
+            username="abc", 
+            email="abc@gmail.com", 
+            password="topsecret1"
+        )
+
         Dinosaur.objects.create(
             name="Spinosaurus",
             eating_classification=Dinosaur.EatingClassification.CARNIVORE,
@@ -36,21 +42,21 @@ class DinosaurTestCase(TestCase):
 
     def test_dinosaurs_api(self):
         client = Client()
-        response = client.get("/api/v1/dinosaurs")
+        response = client.get("/api/dinosaurs/")
         self.assertEqual(response.status_code, 200)
         dinosaurs = response.json()
         self.assertEqual(len(dinosaurs), 2)
 
     def test_dinosaur_api(self):
         client = Client()
-        response = client.get("/api/v1/dinosaurs")
+        response = client.get("/api/dinosaurs/")
         self.assertEqual(response.status_code, 200)
         dinosaurs = response.json()
 
         velociraptor = next(dinosaur for dinosaur in dinosaurs if dinosaur["name"] == "Velociraptor")
         velociraptor_id = velociraptor["id"]
 
-        response = client.get(f"/api/v1/dinosaurs/{velociraptor_id}/")
+        response = client.get(f"/api/dinosaurs/{velociraptor_id}/")
         self.assertEqual(response.status_code, 200)
         dinosaur = response.json()
 
@@ -61,3 +67,9 @@ class DinosaurTestCase(TestCase):
         self.assertEqual(dinosaur["average_size"], "U")
         self.assertFalse(dinosaur["image1"])
         self.assertFalse(dinosaur["image2"])
+
+    def test_favorite_dinosaurs(self):
+        user = User.objects.get(username="abc")
+        spinosaurus = Dinosaur.objects.get(name="Spinosaurus")
+        user.favorite_dinosaurs.add(spinosaurus)
+        self.assertEqual(user.favorite_dinosaurs.count(), 1)

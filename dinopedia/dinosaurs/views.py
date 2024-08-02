@@ -1,29 +1,23 @@
-from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.parsers import JSONParser
+from rest_framework import authentication, permissions, viewsets
 
 from .models import Dinosaur
 from .serializers import DinosaurSerializer
 
 
-@csrf_exempt
-def dinosaurs_list(request):
-    if request.method == "GET":
-        dinosaurs = Dinosaur.objects.all()
-        serializer = DinosaurSerializer(dinosaurs, many=True)
-        return JsonResponse(serializer.data, safe=False, status=200)
+class DefaultsMixin(object):
+
+    # authentication_classes = (
+    #     authentication.BasicAuthentication,
+    #     authentication.TokenAuthentication,
+    # )
+    # permission_classes = (
+    #     permissions.IsAuthenticated,
+    # )
+    paginate_by = 25
+    paginate_by_param = 'page_size'
+    max_paginate_by = 100
 
 
-@csrf_exempt
-def dinosaur_detail(request, pk):
-   
-    try:
-        dinosaur = Dinosaur.objects.get(pk=pk)
-    except Dinosaur.DoesNotExist:
-        return HttpResponse(status=404)
-
-    if request.method == "GET":
-        serializer = DinosaurSerializer(dinosaur)
-        return JsonResponse(serializer.data, status=200)
-    
+class DinosaurViewSet(DefaultsMixin, viewsets.ReadOnlyModelViewSet):
+    queryset = Dinosaur.objects.order_by("name")
+    serializer_class = DinosaurSerializer
