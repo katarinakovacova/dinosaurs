@@ -1,37 +1,27 @@
-FROM python:3.12-slim as dependencies
+FROM python:3.12-slim
 
-COPY install-poetry.py ./
-RUN POETRY_HOME=/opt/poetry python install-poetry.py --yes
-ENV PATH "/opt/poetry/bin:$PATH"
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        gcc \
+        libpq-dev \
+        python3-dev && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /usr/dinopedia/app
-WORKDIR /usr/dinopedia/app
-
-RUN apt-get -yq update
+RUN pip install pip poetry setuptools wheel -U --no-cache-dir
 RUN poetry config virtualenvs.in-project true
 
-RUN apt-get --assume-yes install libpq-dev gcc
+WORKDIR /usr/dinopedia/app
 
-COPY pyproject.toml poetry.lock ./
+COPY pyproject.toml poetry.lock init.sh .
+RUN poetry install --no-cache
 
-RUN poetry install --no-dev --no-root
+COPY dinopedia dinopedia
+RUN poetry install --no-cache
 
-##################################
-FROM python:3.12-slim as production
-
-# postgres dependency - to see if needed or not
-RUN apt update && apt --assume-yes install libpq5
-
-COPY --from=dependencies /usr/dinopedia/app /usr/dinopedia/app
-
-RUN useradd --uid 8001 --user-group --no-create-home app
+RUN useradd --user-group --no-create-home app
 RUN chown -R app:app /usr/dinopedia/app
 
 USER app
 
-ENV VIRTUAL_ENV=/usr/dinopedia/app/.venv
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-
-WORKDIR /usr/dinopedia/app
-
-COPY dinopedia dinopedia
+ENTRYPOINT ["/bin/bash"]
+CMD ["init.sh"]

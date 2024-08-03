@@ -47,4 +47,4 @@ class Dinosaur(models.Model):
     
 
 class User(AbstractUser):
-    favorite_dinosaurs = models.ManyToManyField(Dinosaur)
+    favorite_dinosaurs = models.ManyToManyField(Dinosaur, blank=True)

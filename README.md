@@ -1,33 +1,53 @@
 # GlobalWebIndex Python Challenge - v1 | Exercise: DinosaursAficionado
 
-Create a Python application for Dinosaurs Aficionados which is going to be used to maintain and provide various information about all kinds of Dinosaurs.
+Python application for Dinosaurs Aficionados used to maintain and provide various information about all kinds of Dinosaurs.
 
-As an application administrator you’d like to have the ability to :
+As an application administrator you have the ability to:
 * Add a kind of dinosaur 
   * Name
-  * Eating classification e.g [herbivores, omnivores, and carnivores]
+  * Eating classification [herbivores, omnivores, carnivores, unknown]
   * Typical Colour
-  * Period they lived e.g [triassic , jurassic, cretaceous, paleogene, neogene]
-  * Average Size e.g [tiny, very small, small, medium, large, very large etc]).
+  * Period they lived [triassic, jurassic, cretaceous, paleogene, neogene, unknown]
+  * Average Size [tiny, very small, small, medium, large, very large, gigantic, unknown]
 * Remove a kind(s) of dinosaur(s)
 * Associate up to 2 images with each dinosaur
 * Remove image(s) 
 
-As a developer you’d like to Integrate with the application and have the ability to : 
-* Find all the available kinds of dinosaurs
-* Search for a particular kind and get their images
-* Like your favourite (Optional)
-* See your favourites (Optional)
+As a 3rd party developer wanting to intergrate with the application you have the ability to: 
+* Find all the available kinds of dinosaurs (public)
+* Search for a particular kind and get their images (public)
+* Like your favourite (after registration)
+* See your favourites (after registration)
 
-We would like you to try and present a well written solution that will cover the above criteria. Utilising the following points
-* Python 3.*
-* Django (_Current repo uses a django template. Feel free to restructure if your solution is based on anything else like flask/fast api etc_)
-* Database integration (Postgres or any equivalent)
-* Docker
-* Testing suite
+The solution is using:
+* Python 3.12 (managed by Poetry)
+* Django 5.0 (with its testing suite)
+* Database integration with PostgreSQL 14
+* Docker Compose
 * README
 
-Get creative as much as you want, we WILL appreciate it. You will not be evaluated based on how well you follow these instructions, but based on how sensible your solution will be. In case you are not able to implement something you would normally implement for time reasons, make it clear with a comment.
+## Usage
 
-# Submission
+First, prepare a `.env` file storing your app configuration and secrets (such as passwords). Store it into the root folder of this project. See a following example:
+
+```env
+APP_DEBUG_MODE="True"
+DJANGO_SUPERUSER_EMAIL="abc@def.ghi"
+DJANGO_SUPERUSER_PASSWORD="topsecret1"
+DJANGO_SUPERUSER_USERNAME="admin"
+POSTGRES_DB="dinopedia"
+POSTGRES_HOST="db"
+POSTGRES_PASSWORD="postgres"
+POSTGRES_PORT="5432"
+POSTGRES_USER="postgres"
+```
+
+Then inside the root folder of this project run `docker compose up --build`. The app will be available at `http://localhost`. A default administrator will be created (based on the provided environment variables `DJANGO_SUPERUSER_*`). For administration, log into the Django admin site at `http://localhost/admin/` where you can manage dinosaurs and create new users (for 3rd party developers).
+
+For an easier API integration, a [Browsable API](https://www.django-rest-framework.org/topics/browsable-api/) is enabled at `http://localhost/api/`. Non-registered users can obtain details about all the available kinds of dinosaurs via GET request on the endpoint `/api/dinosaurs/` and retrieve details about a particular kind and get its images via GET request on the endpoint `/api/dinosaurs/<int>/` where `<int>` is a primary key.
+
+After registration by an administrator, a developer can like their favourite dinosaurs via PUT request on the endpoint `/api/users/<name>/` where `<name>` is a username. To see your favourites dinosaurs, use GET request on the endpoint `/api/users/<name>/`. Note that both options require basic authentication and you can obtain and modify only data under your username.
+
+## Submission
+
 Just create a private repo out of this and send invites to collaborate/review on the following emails <cbekos@gwi.com> / <tvesela@gwi.com> / <kgiannousis@gwi.com> / <zmaxa@gwi.com> / <ecechal@gwi.com>
