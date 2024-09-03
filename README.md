@@ -1,4 +1,4 @@
-# GlobalWebIndex Python Challenge - v1 | Exercise: DinosaursAficionado
+# Dinosaurs
 
 Python application for Dinosaurs Aficionados used to maintain and provide various information about all kinds of Dinosaurs.
 
