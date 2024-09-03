@@ -47,7 +47,3 @@ Then inside the root folder of this project run `docker compose up --build`. The
 For an easier API integration, a [Browsable API](https://www.django-rest-framework.org/topics/browsable-api/) is enabled at `http://localhost/api/`. Non-registered users can obtain details about all the available kinds of dinosaurs via GET request on the endpoint `/api/dinosaurs/` and retrieve details about a particular kind and get its images via GET request on the endpoint `/api/dinosaurs/<int>/` where `<int>` is a primary key.
 
 After registration by an administrator, a developer can like their favourite dinosaurs via PUT request on the endpoint `/api/users/<name>/` where `<name>` is a username. To see your favourites dinosaurs, use GET request on the endpoint `/api/users/<name>/`. Note that both options require basic authentication and you can obtain and modify only data under your username.
-
-## Submission
-
-Just create a private repo out of this and send invites to collaborate/review on the following emails <cbekos@gwi.com> / <tvesela@gwi.com> / <kgiannousis@gwi.com> / <zmaxa@gwi.com> / <ecechal@gwi.com>
